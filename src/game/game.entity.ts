@@ -2,35 +2,29 @@ import {
   Table,
   Column,
   Model,
-  HasMany,
-  PrimaryKey,
-  AutoIncrement,
   Unique,
+  PrimaryKey,
+  Default,
   AllowNull,
-  DataType,
+  NotNull,
+  HasMany,
 } from 'sequelize-typescript';
-import { Server } from 'src/server/server.entity';
+import { Server } from '../server/server.entity';
 
 @Table
-export class User extends Model<User> {
+export class Game extends Model<Game> {
   @PrimaryKey
-  @AutoIncrement
+  @Unique
   @Column
   id: number;
 
-  @Unique
   @AllowNull(false)
   @Column
-  username: string;
+  title: string;
 
-  @Unique
   @AllowNull(false)
   @Column
-  email: string;
-
-  @AllowNull(false)
-  @Column({ defaultValue: false })
-  verificatied: boolean;
+  name: string;
 
   @AllowNull(false)
   @Column
