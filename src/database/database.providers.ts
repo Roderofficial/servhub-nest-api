@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 import { User } from '../user/user.entity';
 import { Game } from '../game/game.entity';
-import { Server } from '../server/server.entity';
+import { Server, ServerStatus } from '../server/server.entity';
 
 export const databaseProviders = [
   {
@@ -15,7 +15,7 @@ export const databaseProviders = [
         password: '',
         database: 'nest',
       });
-      sequelize.addModels([User, Game, Server]);
+      sequelize.addModels([User, Game, Server, ServerStatus]);
       sequelize.sync({ force: true });
       return sequelize;
     },

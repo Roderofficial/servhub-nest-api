@@ -49,18 +49,6 @@ export class Server extends Model<Server> {
   @Column
   online: boolean;
 
-  @AllowNull(false)
-  @Column
-  players: number;
-
-  @AllowNull(false)
-  @Column
-  maxPlayers: number;
-
-  @AllowNull(true)
-  @Column
-  map: string;
-
   @AllowNull(true)
   @Column(DataType.JSON)
   extras: JSON;
@@ -78,4 +66,39 @@ export class Server extends Model<Server> {
 
   @BelongsTo(() => User)
   owner: User;
+}
+
+@Table
+export class ServerStatus extends Model<ServerStatus> {
+  @PrimaryKey
+  @Unique
+  @Column
+  id: number;
+
+  @AllowNull(false)
+  @Column
+  online: boolean;
+
+  @AllowNull(false)
+  @Column
+  maxplayers: number;
+
+  @AllowNull(false)
+  @Column
+  players: number;
+
+  @AllowNull(false)
+  @Column
+  createdAt: Date;
+
+  @AllowNull(false)
+  @Column
+  updatedAt: Date;
+
+  @ForeignKey(() => Server)
+  @Column
+  serverId: number;
+
+  @BelongsTo(() => Server)
+  server: Server;
 }
