@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { GameModule } from './game/game.module';
 import { ServerModule } from './server/server.module';
+import { ServerStatusModule } from './server-status/server-status.module';
 
 @Module({
-  imports: [UserModule, GameModule, ServerModule],
+  imports: [UserModule, GameModule, ServerModule, ServerStatusModule],
   controllers: [AppController],
   providers: [AppService],
 })

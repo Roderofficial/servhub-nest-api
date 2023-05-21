@@ -1,7 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
 import { User } from '../user/user.entity';
 import { Game } from '../game/game.entity';
-import { Server, ServerStatus } from '../server/server.entity';
+import { Server } from '../server/server.entity';
+import { ServerStatus } from '../server-status/server-status.entity';
 
 export const databaseProviders = [
   {
