@@ -67,38 +67,3 @@ export class Server extends Model<Server> {
   @BelongsTo(() => User)
   owner: User;
 }
-
-@Table
-export class ServerStatus extends Model<ServerStatus> {
-  @PrimaryKey
-  @Unique
-  @Column
-  id: number;
-
-  @AllowNull(false)
-  @Column
-  online: boolean;
-
-  @AllowNull(false)
-  @Column
-  maxplayers: number;
-
-  @AllowNull(false)
-  @Column
-  players: number;
-
-  @AllowNull(false)
-  @Column
-  createdAt: Date;
-
-  @AllowNull(false)
-  @Column
-  updatedAt: Date;
-
-  @ForeignKey(() => Server)
-  @Column
-  serverId: number;
-
-  @BelongsTo(() => Server)
-  server: Server;
-}

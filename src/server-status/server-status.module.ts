@@ -1,4 +1,13 @@
 import { Module } from '@nestjs/common';
+import { ServerStatusProviders } from './server-status.provider';
+import { ServerStatusService } from './server-status.service';
+import { HttpModule } from '@nestjs/axios';
+import { ServerStatusController } from './server-status.controller';
 
-@Module({})
+@Module({
+  imports: [HttpModule],
+  controllers: [ServerStatusController],
+  providers: [ServerStatusService, ...ServerStatusProviders],
+  exports: [ServerStatusService],
+})
 export class ServerStatusModule {}
