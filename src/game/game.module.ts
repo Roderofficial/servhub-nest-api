@@ -8,5 +8,6 @@ import { DatabaseModule } from 'src/database/database.module';
   imports: [DatabaseModule],
   controllers: [GameController],
   providers: [GameService, ...gameProviders],
+  exports: [GameService],
 })
 export class GameModule {}

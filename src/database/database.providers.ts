@@ -17,7 +17,7 @@ export const databaseProviders = [
         database: 'nest',
       });
       sequelize.addModels([User, Game, Server, ServerStatus]);
-      sequelize.sync({ force: true });
+      sequelize.sync({ force: false });
       return sequelize;
     },
   },

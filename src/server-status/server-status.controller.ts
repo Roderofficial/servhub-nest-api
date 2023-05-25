@@ -21,7 +21,7 @@ export class ServerStatusController {
     @Query('port') port: string,
   ) {
     console.log('game', game, 'ip', ip, 'port', port, 'params');
-    const serverStatus = await this.serverStatusService.getRealStatus(
+    const serverStatus = await this.serverStatusService.isServerAvailable(
       ip,
       +port,
       game,

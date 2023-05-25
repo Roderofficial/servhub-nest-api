@@ -5,5 +5,6 @@ export interface HttpServerStatus {
   port: number;
   player: number;
   max_players: number;
+  name: string;
   extra: Nullable<JSON>;
 }

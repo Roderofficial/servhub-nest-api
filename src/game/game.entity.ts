@@ -8,6 +8,7 @@ import {
   AllowNull,
   NotNull,
   HasMany,
+  AutoIncrement,
 } from 'sequelize-typescript';
 import { Server } from '../server/server.entity';
 
@@ -15,6 +16,7 @@ import { Server } from '../server/server.entity';
 export class Game extends Model<Game> {
   @PrimaryKey
   @Unique
+  @AutoIncrement
   @Column
   id: number;
 

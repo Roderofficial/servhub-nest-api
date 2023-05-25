@@ -5,6 +5,10 @@ import { Observable, lastValueFrom } from 'rxjs';
 import { AxiosResponse } from 'axios';
 import { map, catchError } from 'rxjs/operators';
 import { HttpServerStatus } from './httpStatus.interface';
+import { ServerService } from '../server/server.service';
+import { forwardRef } from '@nestjs/common';
+
+import e from 'express';
 
 @Injectable()
 export class ServerStatusService {
@@ -12,6 +16,9 @@ export class ServerStatusService {
     @Inject('SERVER_STATUS_REPOSITORY')
     private serverStatusRepository: typeof ServerStatus,
     private httpService: HttpService,
+
+    @Inject(forwardRef(() => ServerService))
+    private serverService: ServerService,
   ) {}
 
   async findAll(): Promise<ServerStatus[]> {
@@ -32,9 +39,28 @@ export class ServerStatusService {
     return serverStatus.save();
   }
 
-  async getRealStatus(ip: string, port: number, game: string): Promise<any> {
-    const serverStatus = this.fetchServerStatus(ip, port, game);
+  async isServerAvailable(
+    ip: string,
+    port: number,
+    game: string,
+  ): Promise<any> {
+    try {
+      const serverStatus = await this.getRealStatus(ip, port, game);
+      if (serverStatus.response_status == 0) {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
 
+  async getRealStatus(
+    ip: string,
+    port: number,
+    game: string,
+  ): Promise<HttpServerStatus> {
+    const serverStatus = this.fetchServerStatus(ip, port, game);
     return serverStatus;
   }
 
@@ -58,7 +84,7 @@ export class ServerStatusService {
     ).then((res) => {
       return res.data;
     });
-    console.log('serverStatus', serverStatus);
+    console.log('serverStatusB', serverStatus);
     return serverStatus;
   }
 }

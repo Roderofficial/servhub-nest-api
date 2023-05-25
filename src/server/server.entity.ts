@@ -14,6 +14,7 @@ import {
   BelongsToAssociation,
   HasMany,
   BelongsToMany,
+  AutoIncrement,
 } from 'sequelize-typescript';
 import { Game } from '../game/game.entity';
 import { User } from 'src/user/user.entity';
@@ -22,10 +23,11 @@ import { User } from 'src/user/user.entity';
 export class Server extends Model<Server> {
   @PrimaryKey
   @Unique
+  @AutoIncrement
   @Column
   id: number;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   name: string;
 
@@ -45,7 +47,7 @@ export class Server extends Model<Server> {
   @Column
   updatedAt: Date;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   online: boolean;
 
