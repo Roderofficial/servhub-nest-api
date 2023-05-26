@@ -25,4 +25,12 @@ export class GameService {
 
     return game.save();
   }
+
+  async delete(id: number): Promise<void> {
+    await this.gameRepository.destroy({
+      where: {
+        id,
+      },
+    });
+  }
 }

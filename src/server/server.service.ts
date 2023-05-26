@@ -34,10 +34,33 @@ export class ServerService {
     });
   }
 
+  async findByIpPort(ip: string, port: number): Promise<Server> {
+    return this.serverRepository.findOne<Server>({
+      where: {
+        ip,
+        port,
+      },
+    });
+  }
+
   async create(createServerDto: CreateServerDto): Promise<Server> {
     //get the game name by id
 
     const game = await this.gameService.findOne(+createServerDto.gameID);
+    if (!game) {
+      throw 'GAME_NOT_FOUND';
+    }
+
+    //check if server already exists
+    const serverExists = await this.findByIpPort(
+      await this.getRealAdressIp(createServerDto.ip),
+      +createServerDto.port,
+    );
+
+    if (serverExists) {
+      throw 'SERVER_ALREADY_EXISTS';
+    }
+
     // get server status
     const serverStatus = await this.serverStatusService.getRealStatus(
       createServerDto.ip,
@@ -46,7 +69,7 @@ export class ServerService {
     );
 
     if (!serverStatus) {
-      throw new Error('NOT_AVAILABLE');
+      throw 'NOT_AVAILABLE';
     }
 
     const server = new Server();
@@ -66,11 +89,36 @@ export class ServerService {
     return server;
   }
 
-  async update(server_id: number, server: Server): Promise<[number, Server[]]> {
-    return this.serverRepository.update(server, {
+  async update(id: number, data: any): Promise<Server> {
+    const server = await this.serverRepository.findOne<Server>({
       where: {
-        id: server_id,
+        id,
       },
     });
+    return server.update(data);
+  }
+
+  async getRealAdressIp(ip: string): Promise<string> {
+    //check if ip is a domain
+    if (ip.match(/^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}$/)) {
+      const dns = require('dns');
+      return new Promise((resolve, reject) => {
+        dns.lookup(ip, (err, address, family) => {
+          if (err) reject(err);
+          resolve(address);
+        });
+      });
+    } else {
+      return ip;
+    }
+  }
+
+  async updateOnlineStatus(id: number, online: boolean): Promise<Server> {
+    const server = await this.serverRepository.findOne<Server>({
+      where: {
+        id,
+      },
+    });
+    return server.update({ online });
   }
 }

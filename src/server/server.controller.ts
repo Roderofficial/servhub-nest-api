@@ -35,6 +35,36 @@ export class ServerController {
     @Body() createServerDto: CreateServerDto,
     @Response() res: any,
   ): Promise<Server | any> {
-    this.serverService.create(createServerDto);
+    try {
+      const server = await this.serverService.create(createServerDto);
+      return res.status(200).json({
+        server,
+      });
+    } catch (e) {
+      if (e === 'NOT_AVAILABLE') {
+        return res.status(400).json({
+          message: 'Server not available',
+          err_code: 'NOT_AVAILABLE',
+        });
+      }
+      if (e === 'GAME_NOT_FOUND') {
+        return res.status(400).json({
+          message: 'Game not found',
+          err_code: 'GAME_NOT_FOUND',
+        });
+      }
+
+      if (e === 'SERVER_ALREADY_EXISTS') {
+        return res.status(400).json({
+          message: 'Server already exists',
+          err_code: 'SERVER_ALREADY_EXISTS',
+        });
+      }
+
+      console.log(e);
+      return res.status(400).json({
+        message: 'Error',
+      });
+    }
   }
 }

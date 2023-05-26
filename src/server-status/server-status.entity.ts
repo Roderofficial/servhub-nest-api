@@ -14,12 +14,14 @@ import {
   BelongsToAssociation,
   HasMany,
   BelongsToMany,
+  AutoIncrement,
 } from 'sequelize-typescript';
 import { Server } from 'src/server/server.entity';
 
 @Table
 export class ServerStatus extends Model<ServerStatus> {
   @PrimaryKey
+  @AutoIncrement
   @Unique
   @Column
   id: number;
