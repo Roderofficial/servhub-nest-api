@@ -1,9 +1,17 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Server } from './server.entity';
 import { CreateServerDto } from './dto/create-server.dto';
 import { Game } from 'src/game/game.entity';
 import { ServerStatusService } from 'src/server-status/server-status.service';
 import { GameService } from 'src/game/game.service';
+import { ConfigService } from '@nestjs/config';
+import { ServerListDto } from './dto/server-list.dto';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class ServerService {
@@ -11,6 +19,8 @@ export class ServerService {
     @Inject('SERVER_REPOSITORY') private serverRepository: typeof Server,
     private readonly serverStatusService: ServerStatusService,
     private readonly gameService: GameService,
+    private readonly configService: ConfigService,
+    private readonly userService: UserService,
   ) {}
 
   async findAll(): Promise<Server[]> {
@@ -69,6 +79,10 @@ export class ServerService {
     );
 
     if (!serverStatus) {
+      throw 'SERVICE_NOT_AVAILABLE';
+    }
+
+    if (serverStatus.response_status == 0) {
       throw 'NOT_AVAILABLE';
     }
 
@@ -120,5 +134,67 @@ export class ServerService {
       },
     });
     return server.update({ online });
+  }
+
+  async serverList(serverListDto: ServerListDto): Promise<any> {
+    const servers = await this.serverRepository.findAndCountAll({
+      where: {
+        gameId: serverListDto.gameId,
+      },
+      include: [Game],
+      order: [['id', 'DESC']],
+      limit: 20,
+      offset:
+        (parseInt(serverListDto.page) - 1) *
+        this.configService.get('PAGE_SIZE'),
+    });
+    return {
+      ...servers,
+      page: parseInt(serverListDto.page),
+      pageSize: parseInt(this.configService.get('PAGE_SIZE')),
+    };
+  }
+
+  async takeServerOwnership(serverId: number, userId: number): Promise<any> {
+    const server = await this.serverRepository.findOne<Server>({
+      where: {
+        id: serverId,
+      },
+      include: [Game],
+    });
+
+    if (!server) {
+      throw new NotFoundException('SERVER_NOT_FOUND');
+    }
+
+    if (server.ownerId) {
+      throw new ForbiddenException('SERVER_ALREADY_OWNED');
+    }
+
+    //check if user exists
+    const user = await this.userService.findOne(userId);
+
+    //get real server status
+    const serverStatus = await this.serverStatusService.getRealStatus(
+      server.ip,
+      server.port,
+      server.game.name,
+    );
+
+    if (!serverStatus) {
+      console.log(serverStatus);
+      throw new ForbiddenException('SERVICE_NOT_AVAILABLE');
+    }
+
+    if (
+      serverStatus.name !=
+      `${this.configService.get(
+        'TAKE_SERVER_OWNERSHIP_PREFIX',
+      )}${serverId}-${userId}`
+    ) {
+      throw new ForbiddenException('WRONG_SERVER_STATUS');
+    }
+
+    return await server.update({ ownerId: userId });
   }
 }

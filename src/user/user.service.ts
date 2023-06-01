@@ -24,4 +24,12 @@ export class UserService {
     user.email = createUserDto.email;
     return user.save();
   }
+
+  async findByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne<User>({
+      where: {
+        email,
+      },
+    });
+  }
 }

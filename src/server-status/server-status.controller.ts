@@ -49,4 +49,22 @@ export class ServerStatusController {
       });
     }
   }
+
+  @Post('/get-server-status')
+  async getServerStatus(@Body() body: any, @Response() res): Promise<any> {
+    try {
+      const serverStatus = await this.serverStatusService.getRealStatus(
+        body.ip,
+        body.port,
+        body.game,
+      );
+      return res.status(200).json(serverStatus);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({
+        message: 'Server not found',
+        err_code: 'SERVER_NOT_FOUND',
+      });
+    }
+  }
 }

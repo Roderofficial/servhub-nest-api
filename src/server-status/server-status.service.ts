@@ -8,6 +8,7 @@ import { HttpServerStatus } from './httpStatus.interface';
 import { ServerService } from '../server/server.service';
 import { forwardRef } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { ConfigService } from '@nestjs/config';
 
 import e from 'express';
 
@@ -17,6 +18,8 @@ export class ServerStatusService {
     @Inject('SERVER_STATUS_REPOSITORY')
     private serverStatusRepository: typeof ServerStatus,
     private httpService: HttpService,
+    @Inject(forwardRef(() => ConfigService))
+    private configService: ConfigService,
 
     @Inject(forwardRef(() => ServerService))
     private serverService: ServerService,
@@ -136,7 +139,9 @@ export class ServerStatusService {
     port: number,
     game: string,
   ): Promise<any> {
-    const url = `http://127.0.0.1:8000/status`;
+    const url = `${this.configService.get(
+      'SERVER_STATUS_MICROSERVICE_URL',
+    )}/status`;
     const serverStatus = await lastValueFrom(
       this.httpService.get<HttpServerStatus>(url, {
         params: { ip, port, game },
