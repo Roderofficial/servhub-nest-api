@@ -13,6 +13,8 @@ import { Server } from './server.entity';
 import { ServerService } from './server.service';
 import { ServerStatusService } from 'src/server-status/server-status.service';
 import { GameService } from 'src/game/game.service';
+import { ServerListDto } from './dto/server-list.dto';
+import { TakeOwnershipDto } from './dto/take-ownership.dto';
 
 @Controller('server')
 export class ServerController {
@@ -24,10 +26,21 @@ export class ServerController {
     private readonly gameService: GameService,
   ) {}
 
-  @Get()
-  async findAll(@Response() res) {
-    const servers = this.serverService.findAll();
-    return res.status(200).json(servers);
+  @Get('/list')
+  async list(@Response() res: any, @Body() serverListDto: ServerListDto) {
+    const server = await this.serverService.serverList(serverListDto);
+    return res.status(200).json(server);
+  }
+
+  @Post('/take-ownership')
+  async takeOwnership(
+    @Body() takeOwnershipDto: TakeOwnershipDto,
+    @Response() res: any,
+  ) {
+    return await this.serverService.takeServerOwnership(
+      parseInt(takeOwnershipDto.serverId),
+      1,
+    );
   }
 
   @Post('/create')
@@ -35,8 +48,10 @@ export class ServerController {
     @Body() createServerDto: CreateServerDto,
     @Response() res: any,
   ): Promise<Server | any> {
+    console.log(createServerDto);
     try {
       const server = await this.serverService.create(createServerDto);
+      const status = await this.serverStatusService.pushNewStatus(server.id);
       return res.status(200).json({
         server,
       });

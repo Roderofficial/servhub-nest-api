@@ -6,12 +6,14 @@ import { DatabaseModule } from 'src/database/database.module';
 import { ServerStatusModule } from 'src/server-status/server-status.module';
 import { forwardRef } from '@nestjs/common';
 import { GameModule } from 'src/game/game.module';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
     DatabaseModule,
     forwardRef(() => ServerStatusModule),
     forwardRef(() => GameModule),
+    forwardRef(() => UserModule),
   ],
   controllers: [ServerController],
   providers: [ServerService, ...serverProviders],

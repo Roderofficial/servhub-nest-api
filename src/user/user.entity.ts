@@ -33,6 +33,10 @@ export class User extends Model<User> {
   verificatied: boolean;
 
   @AllowNull(false)
+  @Column({ defaultValue: 0, type: DataType.FLOAT })
+  balance: number;
+
+  @AllowNull(false)
   @Column
   createdAt: Date;
 

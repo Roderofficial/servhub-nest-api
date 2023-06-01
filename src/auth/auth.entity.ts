@@ -2,19 +2,23 @@ import {
   Table,
   Column,
   Model,
-  Unique,
   PrimaryKey,
-  Default,
+  Unique,
   AllowNull,
-  NotNull,
-  HasMany,
   AutoIncrement,
   DataType,
+  BelongsTo,
+  ForeignKey,
+  HasOne,
+  BelongsToAssociation,
+  HasMany,
+  BelongsToMany,
 } from 'sequelize-typescript';
-import { Server } from '../server/server.entity';
+
+import { User } from '../user/user.entity';
 
 @Table
-export class Game extends Model<Game> {
+export class AuthToken extends Model<AuthToken> {
   @PrimaryKey
   @Unique
   @AutoIncrement
@@ -23,19 +27,11 @@ export class Game extends Model<Game> {
 
   @AllowNull(false)
   @Column
-  title: string;
+  token: string;
 
   @AllowNull(false)
   @Column
-  name: string;
-
-  @AllowNull(false)
-  @Column
-  port: number;
-
-  @AllowNull(false)
-  @Column({ defaultValue: 1, type: DataType.FLOAT })
-  premiumPrice: number;
+  expiresAt: Date;
 
   @AllowNull(false)
   @Column
@@ -45,6 +41,10 @@ export class Game extends Model<Game> {
   @Column
   updatedAt: Date;
 
-  @HasMany(() => Server)
-  servers: Server[];
+  @ForeignKey(() => User)
+  @Column
+  userId: number;
+
+  @BelongsTo(() => User)
+  user: User;
 }
