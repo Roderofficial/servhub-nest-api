@@ -7,9 +7,11 @@ import { ServerStatusModule } from 'src/server-status/server-status.module';
 import { forwardRef } from '@nestjs/common';
 import { GameModule } from 'src/game/game.module';
 import { UserModule } from 'src/user/user.module';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
+    MailModule,
     DatabaseModule,
     forwardRef(() => ServerStatusModule),
     forwardRef(() => GameModule),

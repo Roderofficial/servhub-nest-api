@@ -5,9 +5,10 @@ import { UserService } from './user.service';
 import { userProviders } from './user.providers';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './user.entity';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, MailModule],
   controllers: [UserController],
   providers: [UserService, ...userProviders],
   exports: [UserService],
