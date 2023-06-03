@@ -18,6 +18,7 @@ import {
 } from 'sequelize-typescript';
 import { Game } from '../game/game.entity';
 import { User } from 'src/user/user.entity';
+import { ServerStatus } from 'src/server-status/server-status.entity';
 
 @Table
 export class Server extends Model<Server> {
@@ -55,6 +56,10 @@ export class Server extends Model<Server> {
   @Column(DataType.JSON)
   extras: JSON;
 
+  @AllowNull(true)
+  @Column({ defaultValue: null })
+  country_code: string;
+
   @ForeignKey(() => Game)
   @Column
   gameId: number;
@@ -68,4 +73,7 @@ export class Server extends Model<Server> {
 
   @BelongsTo(() => User)
   owner: User;
+
+  @HasMany(() => ServerStatus)
+  serverStatuses: ServerStatus[];
 }

@@ -153,15 +153,43 @@ export class ServerStatusService {
     return serverStatus;
   }
 
+  /**
+   * Fetch server location from geolocation-db.com
+   * @param ip  server ip
+   * @returns server location country code or null if not found
+   * @example "PL" or null
+   */
+  public async fetchServerCountryCode(ip: string): Promise<string | null> {
+    const url = `https://geolocation-db.com/json/${this.configService.get(
+      'GEOLOCATION_DB_KEY',
+    )}/${ip}`;
+    const serverLocation = await lastValueFrom(
+      this.httpService.get<any>(url),
+    ).then((res) => {
+      if (res.data.country_code) {
+        return res.data.country_code;
+      } else {
+        return null;
+      }
+    });
+    console.log('serverLocation', serverLocation);
+    return serverLocation;
+  }
+
+  /**
+   * Update all servers status
+   * @returns {Promise<void>}
+   * @memberof ServerStatusService
+   */
   @Cron(CronExpression.EVERY_HOUR, {
     name: 'updateAllServersStatus',
     timeZone: 'Europe/Warsaw',
   })
-  async updateAllServersStatus() {
+  async updateAllServersStatus(): Promise<void> {
     const servers = await this.serverService.findAll();
 
     for (const server of servers) {
-      console.log('update server', server.id, 'time', new Date());
+      console.log('update server id: ', server.id, ', time: ', new Date());
       await this.pushNewStatus(server.id);
     }
   }

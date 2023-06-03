@@ -19,11 +19,7 @@ export class GameService {
   }
 
   async create(createGameDto: CreateGameDto): Promise<Game> {
-    const game = new Game();
-    game.name = createGameDto.name;
-    game.title = createGameDto.title;
-
-    return game.save();
+    return await new Game(createGameDto).save();
   }
 
   async delete(id: number): Promise<void> {
