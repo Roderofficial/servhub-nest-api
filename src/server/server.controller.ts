@@ -26,6 +26,12 @@ export class ServerController {
     private readonly gameService: GameService,
   ) {}
 
+  @Get()
+  async findAll(@Response() res: any): Promise<Server[]> {
+    const servers = await this.serverService.findAll();
+    return res.status(200).json(servers);
+  }
+
   @Get('/list')
   async list(@Response() res: any, @Body() serverListDto: ServerListDto) {
     const server = await this.serverService.serverList(serverListDto);

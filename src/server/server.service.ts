@@ -12,6 +12,7 @@ import { GameService } from 'src/game/game.service';
 import { ConfigService } from '@nestjs/config';
 import { ServerListDto } from './dto/server-list.dto';
 import { UserService } from 'src/user/user.service';
+import { ServerStatus } from 'src/server-status/server-status.entity';
 
 @Injectable()
 export class ServerService {
@@ -24,7 +25,18 @@ export class ServerService {
   ) {}
 
   async findAll(): Promise<Server[]> {
-    return this.serverRepository.findAll<Server>();
+    return this.serverRepository.findAll<Server>({
+      include: [
+        Game,
+        {
+          model: ServerStatus,
+          limit: 1,
+          order: [['id', 'DESC']],
+          required: false,
+          foreignKey: 'serverId',
+        },
+      ],
+    });
   }
 
   async findByGameId(gameId: number): Promise<Server[]> {
@@ -86,6 +98,13 @@ export class ServerService {
       throw 'NOT_AVAILABLE';
     }
 
+    const server_country_code =
+      await this.serverStatusService.fetchServerCountryCode(
+        await this.getRealAdressIp(createServerDto.ip),
+      );
+
+    console.log(server_country_code, 'server_country_code');
+
     const server = new Server();
     server.name = serverStatus.name;
     server.ip = createServerDto.ip;
@@ -93,6 +112,7 @@ export class ServerService {
     server.gameId = +createServerDto.gameID;
     server.online = true;
     server.extras = serverStatus.extra;
+    server.country_code = server_country_code;
     console.log(serverStatus, server);
     console.log(server.dataValues);
     try {
