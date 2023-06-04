@@ -53,7 +53,7 @@ export class AuthService {
     });
 
     return {
-      access_token: this.jwtService.sign({ userId }),
+      access_token: this.jwtService.sign({ id: userId }),
     };
   }
 
@@ -84,5 +84,10 @@ export class AuthService {
       throw 'USER_NOT_FOUND';
     }
     return this.createToken(user.id);
+  }
+
+  async verifyJwtToken(token: string): Promise<Object | UnauthorizedException> {
+    const payload = this.jwtService.verify(token);
+    return payload;
   }
 }
