@@ -44,6 +44,12 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @UseGuards(AuthGuard)
+  @Get('me')
+  findMe(@Request() req): any {
+    return this.userService.findOne(req.user.id);
+  }
+
   /**
    * Get user by id
    * @param {string} id  The id of the user
@@ -56,11 +62,5 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id') id: string): any {
     return this.userService.findOne(+id);
-  }
-
-  @UseGuards(AuthGuard)
-  @Get('/me')
-  findMe(@Request() req): any {
-    return this.userService.findOne(req.user.id);
   }
 }
