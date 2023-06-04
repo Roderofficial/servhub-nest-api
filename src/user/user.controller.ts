@@ -1,8 +1,18 @@
-import { Controller, Get, Param, Response, Body, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Response,
+  Body,
+  Post,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 import { MailService } from 'src/mail/mail.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 /**
  * User controller
@@ -32,6 +42,13 @@ export class UserController {
   @Get()
   findAll(): any {
     return this.userService.findAll();
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('me')
+  findMe(@Request() req): any {
+    const user = this.userService.findOne(req.user.id);
+    return user;
   }
 
   /**

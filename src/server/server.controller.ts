@@ -49,6 +49,15 @@ export class ServerController {
     );
   }
 
+  @Get(':id')
+  async findOne(
+    @Param('id') id: string,
+    @Response() res: any,
+  ): Promise<Server> {
+    const server = await this.serverService.findOne(parseInt(id));
+    return res.status(200).json(server);
+  }
+
   @Post('/create')
   async create(
     @Body() createServerDto: CreateServerDto,

@@ -18,7 +18,6 @@ export class User extends Model<User> {
   @Column
   id: number;
 
-  @Unique
   @AllowNull(false)
   @Column
   username: string;
