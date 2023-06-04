@@ -47,7 +47,8 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get('me')
   findMe(@Request() req): any {
-    return this.userService.findOne(req.user.id);
+    const user = this.userService.findOne(req.user.id);
+    return user;
   }
 
   /**

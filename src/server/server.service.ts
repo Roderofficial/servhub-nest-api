@@ -7,6 +7,7 @@ import {
 import { Server } from './server.entity';
 import { CreateServerDto } from './dto/create-server.dto';
 import { Game } from 'src/game/game.entity';
+import { User } from 'src/user/user.entity';
 import { ServerStatusService } from 'src/server-status/server-status.service';
 import { GameService } from 'src/game/game.service';
 import { ConfigService } from '@nestjs/config';
@@ -52,7 +53,16 @@ export class ServerService {
       where: {
         id,
       },
-      include: [Game],
+      include: [
+        Game,
+        { model: ServerStatus, limit: 1, order: [['id', 'DESC']] },
+        {
+          model: User,
+          as: 'owner',
+          attributes: ['id', 'username'],
+          required: false,
+        },
+      ],
     });
   }
 
