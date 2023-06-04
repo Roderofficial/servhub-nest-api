@@ -1,7 +1,7 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class TakeOwnershipDto {
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   readonly serverId: string;
 }

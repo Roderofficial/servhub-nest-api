@@ -74,6 +74,6 @@ export class Server extends Model<Server> {
   @BelongsTo(() => User)
   owner: User;
 
-  @HasMany(() => ServerStatus)
+  @HasMany(() => ServerStatus, { onDelete: 'CASCADE' })
   serverStatuses: ServerStatus[];
 }

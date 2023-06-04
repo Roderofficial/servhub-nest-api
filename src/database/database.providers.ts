@@ -20,7 +20,22 @@ export const databaseProviders = [
         database: configService.get('DB_DATABASE'),
       });
       sequelize.addModels([User, Game, Server, ServerStatus, AuthToken]);
-      sequelize.sync({ force: false });
+
+      await sequelize.sync({ force: false });
+
+      const GameCount = await Game.count();
+      if (GameCount === 0) {
+        await Game.bulkCreate([
+          { title: 'Minecraft Java', name: 'minecraft_java', port: 25565 },
+          {
+            title: 'Counter-Strike: Global Offensive',
+            name: 'csgo',
+            port: 27015,
+          },
+          { title: 'Counter Strike 1.6', name: 'cs16', port: 27015 },
+        ]);
+      }
+
       return sequelize;
     },
   },

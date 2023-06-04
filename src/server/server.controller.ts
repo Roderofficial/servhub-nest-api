@@ -9,6 +9,7 @@ import {
   Inject,
   UseGuards,
   Req,
+  Delete,
 } from '@nestjs/common';
 import { CreateServerDto } from './dto/create-server.dto';
 import { Server } from './server.entity';
@@ -18,6 +19,7 @@ import { GameService } from 'src/game/game.service';
 import { ServerListDto } from './dto/server-list.dto';
 import { TakeOwnershipDto } from './dto/take-ownership.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { NotFoundException, ForbiddenException } from '@nestjs/common';
 
 @Controller('server')
 export class ServerController {
@@ -28,6 +30,26 @@ export class ServerController {
     @Inject(forwardRef(() => GameService))
     private readonly gameService: GameService,
   ) {}
+
+  @UseGuards(AuthGuard)
+  @Delete(':id')
+  async delete(@Param('id') id: string, @Response() res: any, @Req() req: any) {
+    //check if server exist and if user is owner
+    const server = await this.serverService.findOne(parseInt(id));
+    if (!server) {
+      throw new NotFoundException();
+    }
+
+    if (server.ownerId !== req.user.id) {
+      throw new ForbiddenException('NOT_OWNER');
+    }
+
+    await this.serverService.delete(parseInt(id));
+
+    return res.status(200).json({
+      message: 'Server deleted',
+    });
+  }
 
   @Get()
   async findAll(@Response() res: any): Promise<Server[]> {
@@ -48,10 +70,14 @@ export class ServerController {
     @Response() res: any,
     @Req() req: any,
   ) {
-    return await this.serverService.takeServerOwnership(
+    await this.serverService.takeServerOwnership(
       parseInt(takeOwnershipDto.serverId),
       req.user.id,
     );
+
+    return res.status(200).json({
+      message: 'Server ownership taken',
+    });
   }
 
   @UseGuards(AuthGuard)

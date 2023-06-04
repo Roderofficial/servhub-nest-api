@@ -236,4 +236,12 @@ export class ServerService {
       'TAKE_SERVER_OWNERSHIP_PREFIX',
     )}${serverId}-${userId}`;
   }
+
+  async delete(id: number): Promise<void> {
+    await this.serverRepository.destroy({
+      where: {
+        id,
+      },
+    });
+  }
 }
