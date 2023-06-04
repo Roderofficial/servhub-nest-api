@@ -17,8 +17,9 @@ export class GameController {
     return this.gameService.findOne(+id);
   }
 
-  @Post('/create')
-  async create(@Body() createGameDto: CreateGameDto): Promise<Game> {
-    return this.gameService.create(createGameDto);
-  }
+  // Dla bezpieczeństwa usunięte
+  // @Post('/create')
+  // async create(@Body() createGameDto: CreateGameDto): Promise<Game> {
+  //   return this.gameService.create(createGameDto);
+  // }
 }
