@@ -7,6 +7,8 @@ import {
   Post,
   forwardRef,
   Inject,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CreateServerDto } from './dto/create-server.dto';
 import { Server } from './server.entity';
@@ -15,6 +17,7 @@ import { ServerStatusService } from 'src/server-status/server-status.service';
 import { GameService } from 'src/game/game.service';
 import { ServerListDto } from './dto/server-list.dto';
 import { TakeOwnershipDto } from './dto/take-ownership.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('server')
 export class ServerController {
@@ -32,21 +35,40 @@ export class ServerController {
     return res.status(200).json(servers);
   }
 
-  @Get('/list')
+  @Post('/list')
   async list(@Response() res: any, @Body() serverListDto: ServerListDto) {
     const server = await this.serverService.serverList(serverListDto);
     return res.status(200).json(server);
   }
 
+  @UseGuards(AuthGuard)
   @Post('/take-ownership')
   async takeOwnership(
     @Body() takeOwnershipDto: TakeOwnershipDto,
     @Response() res: any,
+    @Req() req: any,
   ) {
     return await this.serverService.takeServerOwnership(
       parseInt(takeOwnershipDto.serverId),
-      1,
+      req.user.id,
     );
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/ownership-server-name/:id')
+  async getToOwnershipServerNameRequired(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Response() res: any,
+  ) {
+    const name = await this.serverService.getServerOwnershipNameGenerate(
+      parseInt(id),
+      req.user.id,
+    );
+
+    return res.status(200).json({
+      name,
+    });
   }
 
   @Get(':id')

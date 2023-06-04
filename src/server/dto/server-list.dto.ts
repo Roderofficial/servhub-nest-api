@@ -1,14 +1,15 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsNumber } from 'class-validator';
 
 export class ServerListDto {
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   readonly gameId: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   readonly language: string;
 
-  @IsString()
+  @IsNumber()
+  @IsNotEmpty()
   readonly page = '1';
 }

@@ -59,7 +59,7 @@ export class ServerService {
         {
           model: User,
           as: 'owner',
-          attributes: ['id', 'username'],
+          attributes: ['id', 'username', 'verificatied'],
           required: false,
         },
       ],
@@ -171,7 +171,10 @@ export class ServerService {
       where: {
         gameId: serverListDto.gameId,
       },
-      include: [Game],
+      include: [
+        Game,
+        { model: ServerStatus, limit: 1, order: [['id', 'DESC']] },
+      ],
       order: [['id', 'DESC']],
       limit: 20,
       offset:
@@ -222,9 +225,15 @@ export class ServerService {
         'TAKE_SERVER_OWNERSHIP_PREFIX',
       )}${serverId}-${userId}`
     ) {
-      throw new ForbiddenException('WRONG_SERVER_STATUS');
+      throw new ForbiddenException('WRONG_SERVER_NAME');
     }
 
     return await server.update({ ownerId: userId });
+  }
+
+  async getServerOwnershipNameGenerate(serverId: number, userId: number) {
+    return `${this.configService.get(
+      'TAKE_SERVER_OWNERSHIP_PREFIX',
+    )}${serverId}-${userId}`;
   }
 }

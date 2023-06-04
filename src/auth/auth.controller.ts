@@ -53,7 +53,7 @@ export class AuthController {
     return res.status(200).json(response);
   }
 
-  @Post('signup')
+  @Post('register')
   async signup(@Body() registerDto: RegisterDto, @Response() res) {
     const user = await this.userService.findByEmail(registerDto.email);
     if (user) {

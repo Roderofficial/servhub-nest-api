@@ -8,11 +8,13 @@ import { forwardRef } from '@nestjs/common';
 import { GameModule } from 'src/game/game.module';
 import { UserModule } from 'src/user/user.module';
 import { MailModule } from 'src/mail/mail.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
     MailModule,
     DatabaseModule,
+    AuthModule,
     forwardRef(() => ServerStatusModule),
     forwardRef(() => GameModule),
     forwardRef(() => UserModule),
