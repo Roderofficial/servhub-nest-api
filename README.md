@@ -1,40 +1,11 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# ServHub Api- Lista serwerów gier
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+ServHub jest małym projektem majacym na celu zapoznanie się z technologiami wykorzystywanymi w Nest.js. Projekt powstał wyłacznie w celach edukacyjnych i nie jest zalecane korzystanie z niego publicznie.
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
+# Uruchamianie aplikacji
+``` 
 # development
 $ npm run start
 
@@ -45,29 +16,44 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
 
-```bash
-# unit tests
-$ npm run test
+## Licencja
 
-# e2e tests
-$ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
-```
+Aplikacja nie posiada żadnej licencji. Autor zezwala na eksploatowanie aplikacji w pełnym zakresie zgodnym z prawem. Autor nie ponosi odpowiedzialności za powstałe szkody.
 
-## Support
+## Zmienne środowiskowe
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Aby uruchomić aplikację muszisz dodać następujące zmienne środowiskowe do pliku .env
 
-## Stay in touch
+`JWT_SECRET` - Losowy ciąg, Klucz szyfrujący wykorzystywany przez moduł JWT 
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+`PAGE_SIZE` - Numer przestawiający ilość serwerów wyświetlanych na jednej stronie
 
-## License
+`TAKE_SERVER_OWNERSHIP_PREFIX` - Ciąg, Prefiks wykorzystywany przy generowaniu i weryikowaniu właściciela serwera, przykładowo `SERVHUB-GET-OWNER-`
 
-Nest is [MIT licensed](LICENSE).
+`DB_HOST` - Adres ip bazy danych
+
+`DB_PORT` - Port bazy danych
+
+`DB_USERNAME` - Nazwa użytkownika bazy danych
+
+`DB_PASSWORD` - Hasło bazy danych
+
+`DB_DATABASE` - Nazwa bazy danych
+
+`SERVER_STATUS_MICROSERVICE_URL` - Adres url mikroserwisu do sprawdzania statutu serwera 
+
+`MAIL_HOST` - Host Poczty
+
+`MAIL_PORT` - Port Poczty
+
+`MAIL_USER` - Nazwa użytkownika Poczty
+
+`MAIL_PASS` - Hasło poczty
+
+`GEOLOCATION_DB_KEY` - Klucz api z serwisu https://geolocation-db.com/
+## Koleckja Endpointów
+
+[Postman](https://www.postman.com/galactic-sunset-757990/workspace/servhub/collection/21826280-b0b8c1cf-4f24-48c4-b2e2-341521ec749f?action=share&creator=21826280)
+
