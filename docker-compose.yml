@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        JWT_SECRET:
+        PAGE_SIZE:
+        TAKE_SERVER_OWNERSHIP_PREFIX:
+        DB_HOST:
+        DB_PORT:
+        DB_USERNAME:
+        DB_PASSWORD:
+        DB_DATABASE:
+        MAIL_HOST:
+        MAIL_PORT:
+        MAIL_USER:
+        MAIL_PASS:
+        GEOLOCATION_DB_KEY:
+    ports:
+      - 3000:3000

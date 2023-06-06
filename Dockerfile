@@ -1,0 +1,71 @@
+# Base image
+FROM node:18
+
+#App environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# user env variables
+ARG JWT_SECRET
+ENV JWT_SECRET=$JWT_SECRET
+
+ARG PAGE_SIZE
+ENV PAGE_SIZE=$PAGE_SIZE
+
+ARG TAKE_SERVER_OWNERSHIP_PREFIX
+ENV TAKE_SERVER_OWNERSHIP_PREFIX=$TAKE_SERVER_OWNERSHIP_PREFIX
+
+ARG DB_HOST
+ENV DB_HOST=$DB_HOST
+
+ARG DB_PORT
+ENV DB_PORT=$DB_PORT
+
+ARG DB_USERNAME
+ENV DB_USERNAME=$DB_USERNAME
+
+ARG DB_PASSWORD
+ENV DB_PASSWORD=$DB_PASSWORD
+
+ARG DB_DATABASE
+ENV DB_DATABASE=$DB_DATABASE
+
+ARG SERVER_STATUS_MICROSERVICE_URL
+ENV SERVER_STATUS_MICROSERVICE_URL=$SERVER_STATUS_MICROSERVICE_URL
+
+ARG MAIL_HOST
+ENV MAIL_HOST=$MAIL_HOST
+
+ARG MAIL_PORT
+ENV MAIL_PORT=$MAIL_PORT
+
+ARG MAIL_USER
+ENV MAIL_USER=$MAIL_USER
+
+ARG MAIL_PASS
+ENV MAIL_PASS=$MAIL_PASS
+
+ARG GEOLOCATION_DB_KEY
+ENV GEOLOCATION_DB_KEY=$GEOLOCATION_DB_KEY
+ 
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
+
+# Install app dependencies
+RUN npm install
+
+# Bundle app source
+COPY . .
+
+# Creates a "dist" folder with the production build
+RUN npm run build
+
+# Expose the port the app runs in
+EXPOSE 3000
+
+# Start the server using the production build
+CMD [ "node", "dist/main.js" ]
