@@ -18,6 +18,7 @@ services:
         MAIL_PORT:
         MAIL_USER:
         MAIL_PASS:
+        MAIL_NAME: ServHub
         GEOLOCATION_DB_KEY:
     ports:
       - 3000:3000

@@ -170,6 +170,7 @@ export class ServerService {
     const servers = await this.serverRepository.findAndCountAll({
       where: {
         gameId: serverListDto.gameId,
+        online: true,
       },
       include: [
         Game,

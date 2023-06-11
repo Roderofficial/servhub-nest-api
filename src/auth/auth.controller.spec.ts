@@ -15,4 +15,16 @@ describe('AuthController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  it('register', () => {
+    expect(controller.signup).toBeDefined();
+  });
+
+  it('validate-code', () => {
+    expect(controller.validateCode).toBeDefined();
+  });
+
+  it('get-code', () => {
+    expect(controller.getCode).toBeDefined();
+  });
 });

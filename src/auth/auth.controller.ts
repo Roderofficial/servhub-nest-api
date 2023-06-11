@@ -61,7 +61,6 @@ export class AuthController {
     }
 
     const newUser = await this.userService.create(registerDto);
-    await this.mailService.sendUserConfirmation(newUser, 'aaaa');
     return res.status(200).json({ message: 'User created' });
   }
 }

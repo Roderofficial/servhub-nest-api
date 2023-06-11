@@ -23,7 +23,9 @@ import { getLogger } from 'nodemailer/lib/shared';
         },
 
         defaults: {
-          from: '"nest-modules"  <noreply@hoffens.com.pl>',
+          from: `"${configService.get('APP_NAME')}"  <${configService.get(
+            'MAIL_USER',
+          )}>`,
         },
         template: {
           dir: join(__dirname, 'templates'),
